@@ -21,7 +21,7 @@ class CustomDrawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Eu Amo Séries 🎬',
+                    'Eu Amo Séries! 🎬',
                     style: GoogleFonts.lobster(
                       color: Theme.of(context).colorScheme.onPrimary,
                       fontSize: 32,
