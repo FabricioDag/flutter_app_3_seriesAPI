@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class MyThemeModel extends ChangeNotifier {
 
   bool isDark = false;
-  MyTheme myTheme = MyTheme(color: Color(0xff8716d5));
+  MyTheme myTheme = MyTheme(color: Color.fromARGB(255, 190, 7, 7));
   ThemeData get customTheme => myTheme.customTheme;
   ThemeData get customThemeDark => myTheme.customThemeDark;
   ThemeMode get themeMode => isDark ? ThemeMode.dark : ThemeMode.light;
@@ -16,10 +16,8 @@ class MyThemeModel extends ChangeNotifier {
 }
 
 class MyTheme {
-  // Default color value
   Color color;
 
-  // Uso de late para inicializar as propriedades posteriormente
   late ColorScheme colorScheme;
   late ColorScheme colorSchemeDark;
   late ThemeData customTheme;

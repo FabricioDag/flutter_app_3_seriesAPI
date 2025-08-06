@@ -12,7 +12,6 @@ class TvShowSearchScreen extends StatefulWidget {
 }
 
 class _TvShowSearchScreenState extends State<TvShowSearchScreen> {
-
   final _formKey = GlobalKey<FormState>();
   final _controller = TextEditingController();
 
