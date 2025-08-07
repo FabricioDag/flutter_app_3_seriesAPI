@@ -1,6 +1,6 @@
 import 'package:app3_series_api/tv_show_grid.dart';
-import 'package:app3_series_api/tv_show_model.dart';
 import 'package:flutter/material.dart';
+import 'package:app3_series_api/tv_show_model.dart';
 import 'package:provider/provider.dart';
 
 class FavTvShowScreen extends StatefulWidget {
@@ -12,34 +12,90 @@ class FavTvShowScreen extends StatefulWidget {
 
 class _FavTvShowScreenState extends State<FavTvShowScreen> {
   @override
-  Widget build(BuildContext context) {
-    var tvShows = context.watch<TvShowModel>().tvShows;
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<TvShowModel>().initialize();
+    });
+  }
 
-    return Container(
-  padding: EdgeInsets.all(16),
-  child: tvShows.isEmpty
-      ? Center(
-          child: Text(
-            'Nenhuma série favorita!',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.black.withAlpha((0.4 * 255).toInt())
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<TvShowModel>(
+      builder: (context, viewModel, child) {
+        if (viewModel.isLoading) {
+          return Center(
+            child: SizedBox(
+              height: 96,
+              width: 96,
+              child: CircularProgressIndicator(strokeWidth: 12),
             ),
-            textAlign: TextAlign.center,
+          );
+        }
+
+        if (viewModel.errorMessage != null) {
+          return Center(
+            child: Container(
+              padding: EdgeInsets.all(32),
+              child: Column(
+                spacing: 32,
+                children: [
+                  Text(
+                    'Error: ${viewModel.errorMessage}',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      viewModel.load();
+                    },
+                    child: Text('Try again'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        return Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              if (viewModel.hasFavorites) ...[
+                const SizedBox(height: 8),
+                Text(
+                  '${viewModel.tvShows.length} Favourite series',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ],
+              const SizedBox(height: 16),
+              Expanded(
+                child: viewModel.hasFavorites
+                    ? TvShowGrid(tvShows: viewModel.tvShows)
+                    : Center(
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 64),
+                            Icon(
+                              Icons.favorite,
+                              size: 96,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            const SizedBox(height: 32),
+                            Text(
+                              'Add your favourite series!',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+              ),
+            ],
           ),
-        )
-      : Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Favoritas',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-            ),
-            SizedBox(height: 16),
-            Expanded(child: TvShowGrid(tvShows: tvShows)),
-          ],
-        ),
-);
+        );
+      },
+    );
   }
 }

@@ -42,12 +42,12 @@ class _TvShowScreenState extends State<TvShowScreen> {
                 spacing: 32,
                 children: [
                   Text(
-                    'Erro: ${snapshot.error}',
+                    'Error: ${snapshot.error}',
                     style: TextStyle(fontSize: 24),
                   ),
                   ElevatedButton(
                     onPressed: () => context.go('/'),
-                    child: Text('VOLTAR'),
+                    child: Text('Return'),
                   ),
                 ],
               ),
@@ -95,12 +95,12 @@ class _TvShowScreenState extends State<TvShowScreen> {
                   SizedBox(height: 8),
                   Text(
                     tvShow.rating == 0.0
-                        ? 'Nota: N/A'
-                        : 'Nota: ${tvShow.rating}',
+                        ? 'Score: N/A'
+                        : 'Score: ${tvShow.rating}',
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(height: 16),
-                  // Text(tvShow.summary, style: TextStyle(fontSize: 16)),
+                  
                   Html(data: tvShow.summary),
                   SizedBox(height: 16),
                   Row(
@@ -108,25 +108,24 @@ class _TvShowScreenState extends State<TvShowScreen> {
                     children: [
                       ElevatedButton(
                         onPressed: () => context.go('/search'),
-                        child: Text('VOLTAR'),
+                        child: Text('Return'),
                       ),
                       SizedBox(width: 16),
-                      tvShowModel.tvShows.any((show) => show.id == tvShow.id)
-                          ? ElevatedButton(
-                              onPressed: () {
-                                tvShowModel.removeTvShow(tvShow, context);
-                                context.go('/');
-                              },
-                              child: Text('DESFAVORITAR'),
-                            )
-                          : ElevatedButton(
-                              onPressed: () {
-                                tvShowModel.addTvShow(tvShow, context);
-                                context.go('/');
-                              },
-                              child: Text('FAVORITAR'),
-                            ),
-                      SizedBox(width: 16),
+                      FutureBuilder<bool>(
+                        future: tvShowModel.isFavorite(tvShow),
+                        builder: (context, snapshot) {
+                          final isFavorite = snapshot.data ?? false;
+                          return ElevatedButton(
+                            onPressed: () {
+                              isFavorite
+                                  ? tvShowModel.removeFromFavorites(tvShow)
+                                  : tvShowModel.addToFavorites(tvShow);
+                            },
+                            child: Text(isFavorite ? 'UNFAV' : 'FAV'),
+                          );
+                        },
+                      ),
+                      SizedBox(width: 32),
                     ],
                   ),
                 ],

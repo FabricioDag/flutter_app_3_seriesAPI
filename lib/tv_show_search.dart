@@ -35,7 +35,7 @@ class _TvShowSearchScreenState extends State<TvShowSearchScreen> {
       child: Column(
         children: [
           Text(
-            'Buscar Séries',
+            'Search series',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
           SizedBox(height: 32),
@@ -66,7 +66,7 @@ class _TvShowSearchScreenState extends State<TvShowSearchScreen> {
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Título é obrigatório!';
+                  return 'You must insert a title!';
                 }
                 return null;
               },
@@ -94,12 +94,12 @@ class _TvShowSearchScreenState extends State<TvShowSearchScreen> {
                               spacing: 32,
                               children: [
                                 Text(
-                                  'Erro: ${snapshot.error}',
+                                  'Error: ${snapshot.error}',
                                   style: TextStyle(fontSize: 24),
                                 ),
                                 ElevatedButton(
                                   onPressed: () => context.go('/'),
-                                  child: Text('VOLTAR'),
+                                  child: Text('return'),
                                 ),
                               ],
                             ),
@@ -113,12 +113,12 @@ class _TvShowSearchScreenState extends State<TvShowSearchScreen> {
                               spacing: 32,
                               children: [
                                 Text(
-                                  'Nenhuma série encontrada!',
+                                  'No series found!',
                                   style: TextStyle(fontSize: 24),
                                 ),
                                 ElevatedButton(
                                   onPressed: () => context.go('/'),
-                                  child: Text('VOLTAR'),
+                                  child: Text('Return'),
                                 ),
                               ],
                             ),
@@ -127,7 +127,7 @@ class _TvShowSearchScreenState extends State<TvShowSearchScreen> {
                       } else {
                         return Column(children: [
                           Text(
-                            '${snapshot.data!.length} séries encontradas!',
+                            '${snapshot.data!.length} Series found!',
                             style: TextStyle(
                               fontSize: 18,
                               color: Theme.of(context).colorScheme.primary,
